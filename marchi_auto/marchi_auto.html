@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marchi d’auto</title>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/5/5a/Car_icon_alone.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<style>
+    * {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #242222;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #D9D9D9;
+        border: 1px solid #242222;
+        border-width: 0px 1px 0px 1px;
+        border-radius: 2px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #e9e8e8;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Inter', sans-serif;
+        background-color: #D7D7D7;
+    }
+    h1 {
+        font-size: 100px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 80px;
+    }
+    .container {
+        width: 1800px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        row-gap: 86px;
+        column-gap: 60px;
+        margin: auto;
+        flex-wrap: wrap;
+        margin-bottom: 50px;
+    }
+    .card {
+        width: 540px;
+        height: 200px;
+        background-color: #9B9B9B;
+        display: flex;
+        align-items: center;
+        border-radius: 20px 30px 20px 30px;
+        border: 1px solid #000000;
+        box-shadow: 6px 6px 6px 1px rgba(104, 100, 100), 
+                    -6px -6px 6px 1px rgb(243, 243, 243);
+        transition: 0.7s;
+    }
+    .card:hover {
+        background-color: #BABABA;
+        cursor: crosshair;
+        border-color: black;
+    }
+    .card_normal:hover {
+        box-shadow: 6px 0px 6px 1px rgb(255, 0, 0), 
+                    0px 6px 6px 1px rgb(77, 255, 7),
+                    -6px 0px 6px 1px rgb(66, 24, 255),
+                    0px -6px 6px 1px rgb(226, 28, 252);
+    }
+    .card_owned {
+        color: #18EC79;
+        border-color: #18EC79;
+        box-shadow: 3px 3px 20px 7px rgba(24, 236, 121, 0.5);
+    }
+    .card_progress {
+        color: #F4C95B;
+        border-color: #E2670D;
+        box-shadow: 3px 3px 20px 7px rgba(226, 103, 13, 0.5);
+    }
+    .img_box {
+        width: 170px;
+        height: 170px;
+        margin-left: 15px;
+        display: flex;
+        justify-content: center;
+    }
+    img {
+        max-height: 170px;
+        max-width: 170px;
+        object-fit: contain;
+    }
+    .text {
+        width: 330px;
+        font-size: 50px;
+        font-weight: 400;
+        text-align: center;
+    }
+</style>
+<body>
+    <h1> Marchi d’auto posseduti </h1>
+    <div class="container">
+        <!-- <div class="card">
+            <span class="img_box"> <img src="https://pngimg.com/uploads/ferrari/ferrari_PNG10665.png" alt="Ferrari"> </span>
+            <span class="text"> Ferrari </span>
+        </div> -->
+    </div>
+</body>
+<script>
+
+    let dati
+    loadJSON()
+
+    async function loadJSON() {
+        try {
+            const response = await fetch('marchi_auto_dati.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            console.log(data);
+            loadData(data)
+        } catch (error) {
+            console.error('Errore:', error);
+        }
+    }
+
+    function loadData(data) {
+        dati = data
+
+        let datiLocalStorage = JSON.parse(localStorage.getItem('marchi_d_auto'))
+        if (datiLocalStorage !== null) {
+            for (let i = 0; i < datiLocalStorage.length; i++) {
+                dati[i].status = datiLocalStorage[i].status
+            }
+            dati = dati
+        } else {
+            localStorage.setItem('marchi_d_auto', JSON.stringify(dati))
+        }
+
+        createHtmlCards()
+    }
+
+    function createHtmlCards() {
+        const container = document.querySelector('.container')
+
+        dati.forEach( marchio => {
+            const card = document.createElement('div')
+            const img_box = document.createElement('span')
+            const img = document.createElement('img')
+            const text = document.createElement('span')
+
+            card.classList.add('card')
+            img_box.classList.add('img_box')
+            text.classList.add('text')
+
+            img.src = marchio.img
+            text.textContent = marchio.nome
+
+            if (marchio.status === 1) {
+                card.classList.add('card_progress')
+            } else if (marchio.status === 2) {
+                card.classList.add('card_owned')
+            } else {
+                card.classList.add('card_normal')
+            }
+
+            card.addEventListener('click', function () {
+                let index = dati.findIndex(el => el.nome === marchio.nome)
+
+                switch (Number(dati[index].status)) {
+                    case 0:
+                        card.classList.add('card_progress')
+                        card.classList.remove('card_normal')
+                        dati[index].status = 1
+                        localStorage.setItem('marchi_d_auto', JSON.stringify(dati))
+                        break
+                    case 1:
+                        card.classList.remove('card_progress')
+                        card.classList.add('card_owned')
+                        dati[index].status = 2
+                        localStorage.setItem('marchi_d_auto', JSON.stringify(dati))
+                        break
+                    case 2:
+                        card.classList.remove('card_owned')
+                        card.classList.add('card_normal')
+                        dati[index].status = 0
+                        localStorage.setItem('marchi_d_auto', JSON.stringify(dati))
+                        break
+                }
+            })
+
+            img_box.appendChild(img)
+            card.appendChild(img_box)
+            card.appendChild(text)
+            container.appendChild(card)
+        })
+    }
+    
+</script>
+</html>
