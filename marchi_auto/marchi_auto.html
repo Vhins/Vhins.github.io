@@ -45,6 +45,10 @@
         font-weight: 700;
         text-align: center;
         margin-bottom: 80px;
+        display: flex;
+        justify-content: center;
+        margin-top: 50px;
+        align-items: center;
     }
     .container {
         width: 1800px;
@@ -108,9 +112,16 @@
         font-weight: 400;
         text-align: center;
     }
+    #counter {
+        font-size: 50px;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
 </style>
 <body>
     <h1> Marchi d’auto posseduti </h1>
+    <div id="counter"> 0/0 </div>
     <div class="container">
         <!-- <div class="card">
             <span class="img_box"> <img src="https://pngimg.com/uploads/ferrari/ferrari_PNG10665.png" alt="Ferrari"> </span>
@@ -130,12 +141,13 @@
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
-            console.log(data);
             loadData(data)
         } catch (error) {
             console.error('Errore:', error);
         }
     }
+
+    let counter_owned = 0
 
     function loadData(data) {
         dati = data
@@ -173,6 +185,7 @@
                 card.classList.add('card_progress')
             } else if (marchio.status === 2) {
                 card.classList.add('card_owned')
+                counter_owned ++
             } else {
                 card.classList.add('card_normal')
             }
@@ -192,14 +205,18 @@
                         card.classList.add('card_owned')
                         dati[index].status = 2
                         localStorage.setItem('marchi_d_auto', JSON.stringify(dati))
+                        counter_owned ++
                         break
                     case 2:
                         card.classList.remove('card_owned')
                         card.classList.add('card_normal')
                         dati[index].status = 0
                         localStorage.setItem('marchi_d_auto', JSON.stringify(dati))
+                        counter_owned --
                         break
                 }
+
+                updateCounter()
             })
 
             img_box.appendChild(img)
@@ -207,7 +224,14 @@
             card.appendChild(text)
             container.appendChild(card)
         })
+
+        updateCounter()
     }
     
+    function updateCounter() {
+        document.getElementById('counter').innerText = counter_owned + "/" + dati.length
+    }
+
+
 </script>
 </html>
