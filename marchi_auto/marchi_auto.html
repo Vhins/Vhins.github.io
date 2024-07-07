@@ -154,9 +154,32 @@
 
         let datiLocalStorage = JSON.parse(localStorage.getItem('marchi_d_auto'))
         if (datiLocalStorage !== null) {
-            for (let i = 0; i < datiLocalStorage.length; i++) {
-                dati[i].status = datiLocalStorage[i].status
+
+            let tutti_i_marchi = []
+            datiLocalStorage.forEach(marchio => {
+                if (marchio.nome) { tutti_i_marchi.push(marchio.nome) }
+            })
+
+            for(let i = 0; i < dati.length; i++) {
+                if (!tutti_i_marchi.includes(dati[i].nome)) {
+                    datiLocalStorage.push(dati[i])
+                }
             }
+
+            tutti_i_marchi.forEach( marchio => {
+                for (let i = 0; i < datiLocalStorage.length; i++) {
+                    if (marchio === datiLocalStorage[i].nome) {
+                        for (let j = 0; j < dati.length; j++) {
+                            if (marchio === dati[j].nome) {
+                                dati[j].status = datiLocalStorage[i].status
+                            }
+                        }
+                    }
+                }
+            })
+
+
+
             dati = dati
         } else {
             localStorage.setItem('marchi_d_auto', JSON.stringify(dati))
