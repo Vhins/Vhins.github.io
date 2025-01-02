@@ -1,16 +1,50 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Gioco memory online">
-    <meta name='keywords' content='vincenzo manzi, vincenzomanzi, vincenzomanzi.com, vhins, vhins_, contact@vincenzomanzi.com, memory, gioco, gioco online'>
-    <meta name='author' content='name, contact@vincenzomanzi.com'>
-    <meta name="robots" content="noindex, follow">
     <title>Gioco Memory</title>
-    <!-- <link rel="icon" href=""> -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1> Gioco Memory (WIP) </h1>
+    
+    <div id="questions">
+        <div id="first_question">
+            <h1 id="Q"> MEMORY </h1>
+    
+            <span>
+                <button class="answer" onclick="play(event)"> Gioca </button>
+            </span>
+        </div>
+
+        <div id="second_question">
+            <h1 id="Q"> Quale set di carte vuoi usare? </h1>
+    
+            <span class="deck_types">
+                <div>
+                    <img class="deck_type" id="D1" onclick="chooseDeckType(event)" src="https://cdn.images.fecom-media.com/FE00050612/images/HE1878146_1433773-HOP-SMA-P01_W0oZHIfsW0.jpg" alt="animals">
+                    <h3> Animals </h3>
+                </div>
+                <div>
+                    <img class="deck_type" id="D2" onclick="chooseDeckType(event)" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb4GpktFeKOBOwNPesOtmDSRiQjUts_MeE0pJg2SNfxzGFAGg_pFR_amUg2pU-c8-sSao&usqp=CAU" alt="cars">
+                    <h3> Cars </h3>
+                </div>
+                <div>
+                    <img class="deck_type" id="D3" onclick="chooseDeckType(event)" src="https://static.vecteezy.com/system/resources/previews/000/696/058/non_2x/office-household-objects-collection-vector.jpg" alt="objects">
+                    <h3> Objects </h3>
+                </div>
+                <div>
+                    <img class="deck_type" id="D4" onclick="chooseDeckType(event)" src="https://i.pinimg.com/736x/47/c0/4c/47c04c164c821913e5e914f567ce390f.jpg" alt="jobs">
+                    <h3> Jobs </h3>
+                </div>
+            </span>
+        </div>
+    </div>
+
+    <div id="game">
+        
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
