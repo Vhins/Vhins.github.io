@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8" />
+    <title> Calcolatore differenze nella chiusura </title>
+    <style>
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+span {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+form {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+span p {
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+hr {
+    border: 1px solid #ddd;
+    margin: 20px 0;
+}
+
+#diff {
+    font-size: 18px;
+    font-weight: bold;
+    color: #5cb85c;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    form {
+        padding: 15px;
+    }
+
+    button {
+        width: 100%;
+    }
+}
+
+    </style>
+</head>
+
+<body>
+    <h1>Calcolatore differenze nella chiusura</h1>
+    <span style="display: flex">
+        <button onClick="change(true)">Pranzo</button>
+        <button onClick="change(false)">Cena</button>
+    </span>
+    <br />
+    <form id="calcolo">
+        <span>
+            <p>fondo cassa</p>
+            <input type="number" step="0.01" min="0" name="fondoCassa" value="200" placeholder="200" />
+        </span>
+        <span>
+            <p id="chiusura_">chiusura (parziale)</p>
+            <input type="number" step="0.01" min="0" name="chiusura" />
+        </span>
+        <span>
+            <p>contanti (non rimuovendo il fondo cassa)</p>
+            <input type="number" step="0.01" min="0" name="contanti" />
+        </span>
+        <span id="contanti_cena_only" style="display: none">
+            <p>contanti (RIMUOVENDO il fondo cassa, pranzo)</p>
+            <input type="number" step="0.01" min="0" name="contantiPranzo" />
+        </span>
+        <span>
+            <p id="pos_">pos (parziale)</p>
+            <input type="number" step="0.01" min="0" name="pos" />
+        </span>
+        <span>
+            <p>ticket</p>
+            <input type="number" step="0.01" min="0" name="ticket" />
+        </span>
+        <span id="ticket_cena_only" style="display: none">
+            <p>ticket (pranzo)</p>
+            <input type="number" step="0.01" min="0" name="ticketPranzo" />
+        </span>
+        <span>
+            <p>satispay</p>
+            <input type="number" step="0.01" min="0" name="satispay" />
+        </span>
+        <span id="satispay_cena_only" style="display: none">
+            <p>satispay (pranzo)</p>
+            <input type="number" step="0.01" min="0" name="satispayPranzo" />
+        </span>
+        <span>
+            <p>fatture</p>
+            <input type="number" step="0.01" min="0" name="fatture" />
+        </span>
+        <span id="fatture_cena_only" style="display: none">
+            <p>fatture (pranzo)</p>
+            <input type="number" step="0.01" min="0" name="fatturePranzo" />
+        </span>
+        <hr />
+        <button type="submit">calcola</button>
+    </form>
+    <hr />
+    <span>
+        Differenza fondo cassa:
+        <p id="diff"></p>
+    </span>
+</body>
+
+<script>
+    let pranzo = true
+    function change(bool) {
+        pranzo = bool
+        if (bool) {
+            document.getElementById('contanti_cena_only').style.display = 'none'
+            document.getElementById('ticket_cena_only').style.display = 'none'
+            document.getElementById('satispay_cena_only').style.display = 'none'
+            document.getElementById('fatture_cena_only').style.display = 'none'
+            document.getElementById('chiusura_').textContent = 'chiusura (parziale)'
+            document.getElementById('pos_').textContent = 'pos (parziale)'
+        } else {
+            document.getElementById('contanti_cena_only').style.display = 'block'
+            document.getElementById('ticket_cena_only').style.display = 'block'
+            document.getElementById('satispay_cena_only').style.display = 'block'
+            document.getElementById('fatture_cena_only').style.display = 'block'
+            document.getElementById('chiusura_').textContent = 'chiusura (totale)'
+            document.getElementById('pos_').textContent = 'pos (totale)'
+        }
+    }
+
+    const form = document.getElementById("calcolo")
+    const diffOutput = document.getElementById("diff")
+    form.addEventListener("submit", (event) => {
+        event.preventDefault()
+        if (pranzo) {
+            calcolaDiffPranzo(event)
+        } else {
+            calcolaDiffCena(event)
+        }
+    })
+
+    function calcolaDiffPranzo(event) {
+        const fondoCassa = parseFloat(event.target.fondoCassa.value || 0)
+        const chiusura = parseFloat(event.target.chiusura.value || 0)
+        const contanti = parseFloat(event.target.contanti.value || 0)
+        const pos = parseFloat(event.target.pos.value || 0)
+        const ticket = parseFloat(event.target.ticket.value || 0)
+        const satispay = parseFloat(event.target.satispay.value || 0)
+        const fatture = parseFloat(event.target.fatture.value || 0)
+
+        const differenza = contanti + pos + ticket + satispay - fondoCassa - chiusura - fatture
+        diffOutput.textContent = differenza > 0.0 ? "+" + differenza.toFixed(2) : differenza.toFixed(2)
+        diffOutput.style.color = differenza >= 0.0 ? "#5cb85c" : "#d9534f"
+    }
+
+    function calcolaDiffCena(event) {
+        const fondoCassa = parseFloat(event.target.fondoCassa.value || 0)
+        const chiusura = parseFloat(event.target.chiusura.value || 0)
+        const contanti = parseFloat(event.target.contanti.value || 0)
+        const contantiPranzo = parseFloat(event.target.contantiPranzo.value || 0)
+        const pos = parseFloat(event.target.pos.value || 0)
+        const ticket = parseFloat(event.target.ticket.value || 0)
+        const ticketPranzo = parseFloat(event.target.ticketPranzo.value || 0)
+        const satispay = parseFloat(event.target.satispay.value || 0)
+        const satispayPranzo = parseFloat(event.target.satispayPranzo.value || 0)
+        const fatture = parseFloat(event.target.fatture.value || 0)
+        const fatturePranzo = parseFloat(event.target.fatturePranzo.value || 0)
+
+        const differenza = (contanti + contantiPranzo + pos + ticket + ticketPranzo + satispay + satispayPranzo) - fondoCassa - chiusura - fatture - fatturePranzo
+        diffOutput.textContent = differenza >= 0.0 ? "+" + differenza.toFixed(2) : differenza.toFixed(2)
+        diffOutput.style.color = differenza >= 0.0 ? "#5cb85c" : "#d9534f"
+    }
+</script>
+
+</html>
