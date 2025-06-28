@@ -52,13 +52,13 @@ const handler = function(event) {
 function addCardsToHTML() { //* aggiungendo le carte all html
     const container = document.getElementById("game")
 
-    let card_number = 0
+    // let card_number = 0
 
     for (const carta of gameCards) {
-        card_number += 1
+        // card_number += 1
 
         const div = document.createElement("div")
-        div.innerText = card_number
+        // div.innerText = card_number
         div.id = carta.id
         div.style.backgroundImage = `url(${carta.link})`
         div.className = "non_girata"
