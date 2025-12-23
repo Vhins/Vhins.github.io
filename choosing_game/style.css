@@ -1,0 +1,159 @@
+
+:root {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.home {
+    display: block;
+}
+
+.game {
+    display: none;
+    flex-direction: row;
+    justify-content: center;
+    gap: 150px;
+    margin-top: 50px;
+}
+
+.filters {
+    width: max-content;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin: 40px auto;
+    padding: 5px 20px;
+}
+
+.filter {
+    border: 3px solid #4B3FE4;
+    font-size: 20px;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 8px 20px;
+}
+
+.list_tornei {
+    list-style-type: none;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 50px 100px 30px 100px;
+}
+
+.torneo {
+    font-size: 24px;
+    color: #FFFFFF;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 20px;
+    outline-color: #4B3FE4;
+}
+
+.torneo:hover {
+    transform: scale(1.02);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    outline-width: 4px;
+    outline-style: solid;
+}
+
+.image_torneo {
+  width: 480px;
+  height: 270px;
+  vertical-align: middle;
+  border-radius: 20px;
+}
+
+.name_torneo {
+    font-size: 24px;
+    color: #FFFFFF;
+    margin: 15px 0;
+}
+
+
+
+.choice {
+    max-width: 450px;
+    margin: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.frame_video {
+    border: none;
+    border-radius: 20px;
+    aspect-ratio: 9 / 16;
+    height: 70vh;
+}
+
+.button_video_choice {
+    width: 200px;
+    height: 50px;
+    background-color: #4B3FE4;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    margin: 20px;
+    cursor: pointer;
+}
+
+.list_choice_logos {
+    list-style-type: none;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.choice_logo {
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    object-fit:cover;
+    margin-top: 10px;
+}
+
+.timer {
+    font-size: 48px;
+    color: #FFFFFF;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    position: fixed;
+    top: 20px;
+    right: 30px;
+}
+
+.code_lobby {
+    font-size: 24px;
+    color: #FFFFFF;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    position: fixed;
+    top: 20px;
+    left: 30px;
+}
